@@ -22,9 +22,17 @@ donné par l'utilisateur et qui renvoie le nombre d'étapes pour atteindre 1
 en utilisant la suite de Syracuse.
 
 """
-nb = int(input("entrez un nombre entier supérieur à 0 "))
-while nb < 1 : int(input("entrez un nombre entier supérieur à 0 svp "))
-if nb %2 == 0:
-    print(nb * 3 + 1)
-else:
-    print(nb / 2)
+
+nb = int(input("entrez un nombre entier supérieur à 0: "))
+cpt = 0
+nbEtape = 0 #permet de compter le nombre d'étapes
+while nb < 1 : int(input("entrez un nombre entier supérieur à 0 svp: "))
+while nb != 1:
+    if nb %2 == 0: 
+        nb /= 2 #ici que le calcul se fait
+        nbEtape +=1
+    else:
+        nb = nb * 3 + 1 #ici que le calcul se fait
+        nbEtape +=1
+    cpt += 1
+print(nbEtape)
