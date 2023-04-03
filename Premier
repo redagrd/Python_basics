@@ -1,0 +1,31 @@
+"""
+Premier :
+
+Creer un script qui permet de definir 
+si un nombre est premier ou non.
+
+Si il ne l'est pas, le script doit me permetre 
+de savoir
+combien de fois il peut se diviser.
+
+rappel : un nombre premier n'est divisible 
+que par 1 et par lui meme!
+"""
+nb = int(input("entrez un nombre entier "))
+while nb <= 1:
+    nb = int(input("entrez un nb entier positif"))
+
+PlusPetitDiviseur = 2 
+cpt = 0 #compte le nombre de fois ou il y a un diviseur
+moitier = nb/2 #permet de diiser par 2 a chaque fois que c'est possible
+
+while PlusPetitDiviseur <= moitier: #vérifie si le nombre est directement divisible par 2
+    if nb % PlusPetitDiviseur == 0:
+        cpt += 1
+        print(PlusPetitDiviseur)
+    PlusPetitDiviseur += 1
+
+if not cpt :
+    print("il est premier")
+else :
+    print(cpt, "diviseur")

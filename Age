@@ -1,0 +1,22 @@
+#ex 0.4 catégorie d'age
+age = int(input("Quel est l'âge de l'enfant? "))
+if age >= 12:
+    print("Cadet")
+if age >= 10:
+    print("Minime")
+if age >= 8:
+    print("Pupille")
+else:
+    print("Poussin")
+"""
+#autre méthode
+age = int(input("Quel est l'âge de l'enfant? "))
+elif age >= 12:
+    print("Cadet")
+elif age >= 10:
+    print("Minime")
+elif age >= 8:
+    print("Pupille")
+else:
+    print("Poussin")
+"""

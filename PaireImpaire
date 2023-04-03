@@ -1,0 +1,17 @@
+#ex 0.1 paire impaire
+nb = int(input("Entrez un nombre entier : "))
+if nb %2 == 0 : 
+    print("Pair")
+else : 
+    print("Impair")
+
+#autre méthode
+entrer = int(input("entrez un nombre :")) 
+
+while entrer <= 1:
+    entrer = int(input("entrer un nombre supérieur à 1 s.v.p"))
+
+if entrer % 2 == 0 :
+    print(entrer, "est pair")
+else :
+    print(entrer,"est impair")

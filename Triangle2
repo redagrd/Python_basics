@@ -1,0 +1,35 @@
+"""
+Triangle
+
+But de l'exercice :
+    
+Votre programme demande un nombre positif à 
+l'utilisateur.
+
+Il affiche un triangle d'astérisques dont
+ la taille dépend du nombre et qui point vers la droite:
+
+Exemple pour le nombre 5 le programme affiche :
+
+*
+**
+***
+****
+*****
+****
+***
+**
+*
+"""
+nb = int(input("Entrez un nombre positif "))
+while nb <= 1: int(input("entrez un nb supérieur à 1 svp"))
+
+i = 0
+while i <= nb:
+    print(i*"*")
+    i += 1
+
+while i >= 0:
+    print(i*"*")
+    i -= 1
+

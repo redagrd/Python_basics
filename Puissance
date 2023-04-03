@@ -1,0 +1,25 @@
+"""
+Puissance 2 
+
+Ecrire un script qui determine le nombre de fois qu'un nombre est divisible par 2
+"""
+
+# Programme principal
+n = int(input("Entrez un entier strictement positif :"))
+while n < 1:
+    n = int(input("Entrez un entier STRICTEMENT POSITIF, s.v.p. :"))
+save = n
+
+cpt = 0
+#permet de vérifier si le chiffre est divisible par 2 au moins une fois, et de voir cb de fois le nombre est divisible par 2
+while n%2 == 0:
+    n //= 2
+    cpt += 1
+
+print(save, "est", cpt, "fois divisible par 2.")
+# reste un chiffre impaire
+if n != 1:
+    print("il reste : ",n," qui n'est pas divisible par 2.")
+# reste 1 donc c'est une puissance de 2
+else :
+    print("c'est une puissance de 2 : 2^",cpt)
