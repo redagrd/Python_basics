@@ -32,8 +32,8 @@ etoiles = "* "
 i = 0
 j = 0
 k = 0
-for i in range (nb):
-    for j in range ((nb + 1) - i):
-        espace += " "
+for i in range (nb): 
+    for j in range ((nb + 1) - i): 
+        espace += " " 
         for k in range(i):
             espace += etoiles

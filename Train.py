@@ -21,10 +21,6 @@ qui affiche l'heure du passage;
 tableau = "vitesse | heure\n"
 distance = 170
 for cpt in range(100, 301, 10):
-    heure = distance / cpt
+    heure = 9 + distance / cpt
     tableau += str(cpt) + " km/h | " + str(heure) + "h\n"
-print(tableau)
-
-
-
-    
+    print(tableau)
