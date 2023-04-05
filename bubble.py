@@ -12,15 +12,16 @@
 
 """
 liste = [8 , 5 , 1 , 7 , 6 , 4]
-for cpt in range(len(liste)):
-    for i in range(len(liste)-1):
-        if liste[i+1] < liste[i]:
-            liste[i], liste[i+1] = liste[i+1], liste[i]
+for cpt in range(len(liste)): #boucle de selection
+    for i in range(len(liste)-1): #boucle de comparaison
+        if liste[i+1] < liste[i]: #si l'element suivant est plus petit
+            liste[i], liste[i+1] = liste[i+1], liste[i] #on swap
 print(liste)
 
 """
 print("la liste avant d'être trier: ")
 print(liste)
+flag = True
 while flag:
     flag = False
     for index in range(len(liste)-1):

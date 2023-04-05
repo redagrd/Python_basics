@@ -33,11 +33,10 @@ liste = [8 , 5 , 1 , 7 , 6 , 4]
 #while liste1[0] < liste1[1]:
 #    liste1
 liste1 = min(liste)
-for cpt in range(len(liste)):
-    min_index = cpt
-    for i in range(cpt+1, len(liste)):
-        if liste[i] < liste[min_index]:
-            min_index = i
-    liste[cpt], liste[min_index] = liste[min_index], liste[cpt]
+for cpt in range(len(liste)): #boucle de selection
+    min_index = cpt #on initialise l'index du minimum
+    for i in range(cpt+1, len(liste)): #boucle de comparaison
+        if liste[i] < liste[min_index]: #si l'element suivant est plus petit
+            min_index = i 
+    liste[cpt], liste[min_index] = liste[min_index], liste[cpt] #on swap
 print(liste)
-
