@@ -18,7 +18,6 @@ while len(arr) != 3:
     numbers.strip()
     arr = [int(i) for i in arr]  # on transforme les chaines de caractères en int
 
-
 # On vérifie le triplet pythagoricien
 if arr[0] ** 2 + arr[1] ** 2 == arr[2] ** 2:
     print("Le triangle est rectangle")
