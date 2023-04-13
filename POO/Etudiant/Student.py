@@ -46,9 +46,9 @@ class Student:
     @note2.setter
     def note2(self, b):
         if type(b) == int or type(b) == float :
-               self.__note2 = b
+            self.__note2 = b
         else:
-               raise TypeError("Il faut un nombre")
+            raise TypeError("Il faut un nombre")
 
     def Calcul(self):
         return (self.__note1 + self.__note2) //2
