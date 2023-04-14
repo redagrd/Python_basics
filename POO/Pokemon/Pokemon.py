@@ -56,7 +56,7 @@ class Pokemon: #classe mère
         else:
             return False
         
-    def attaquer(self, poke): #méthode qui permet au Pokémon appelant d’attaquer le Pokémon passé en paramètre. L’attaque déduit atk points de la vie hp du Pokémon attaqué p.
+    def attaquer(self, poke): #méthode qui permet au Pokémon appelant d’attaquer le Pokémon passé en paramètre. L’attaque déduit atk points de la vie hp du Pokémon attaqué poke.
         if (self.type == "eau" and poke.type == "feu") or (self.type == "feu" and poke.type == "plante") or (self.type == "plante" and poke.type == "eau") : #si le type du pokemon est eau et que le type du pokemon attaqué est feu ou si le type du pokemon est feu et que le type du pokemon attaqué est plante ou si le type du pokemon est plante et que le type du pokemon attaqué est eau
             mult = 2 #alors le pokemon attaquant fait des dégats super efficace
             print("c'est super efficace !")
@@ -81,8 +81,4 @@ class Pokemon: #classe mère
             
     def __str__(self):
         return f"Nom: {self.nom} HP: {self.hp} ATK: {self.atk}"
-    
-    
-
-        
     
