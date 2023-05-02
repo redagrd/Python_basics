@@ -1,0 +1,7 @@
+#! /bin/bash
+cd /home/redagrd/Téléchargements
+mkdir Autre Image Musique Video
+touch /home/redagrd/Téléchargements/Musique/musique.mp3
+# echo = affiche du texte à l'écran ou le redirige vers un fichier (ici envoi le texte vers fichier readme), -e permet de prendre en compte les commandes spéciales comme /n
+echo -e "Ceci est le fichier de Téléchargement. \n Merci de respecter l'organisation du répertoire. \n Attention auc virus. \n Le dossier de téléchargement est prêt" > ReadMe.txt
+grep -i "Téléchargement" ReadMe.txt # grep = permet de rechercher du texte et de l'afficher, -i = insensible à la casse, affiche téléchargement en min et en Maj
