@@ -1,0 +1,120 @@
+# TP 1
+
+## Exercice 1
+
+```sql
+SELECT ventes.NUMERO_TICKET
+FROM ventes
+WHERE ventes.ID_ARTICLE = 500;
+```
+
+## Exercice 2
+
+```sql
+SELECT ANNEE, NUMERO_TICKET, DATE_VENTE
+FROM ticket
+WHERE ticket.DATE_VENTE = '2014-01-15';
+```
+
+## Exercice 3
+
+```sql
+SELECT ANNEE, NUMERO_TICKET, DATE_VENTE
+FROM ticket
+WHERE ticket.DATE_VENTE BETWEEN '2014-01-15 00:00:00' AND  '2014-01-17 00:00:00';
+```
+
+## Exercice 4
+
+```sql
+SELECT NUMERO_TICKET, NOM_ARTICLE, QUANTITE
+FROM ventes
+INNER JOIN article
+	ON article.ID_ARTICLE = ventes.ID_ARTICLE
+WHERE ventes.QUANTITE >= 50;
+```
+
+## Exercice 5
+
+```sql
+SELECT ANNEE, NUMERO_TICKET, DATE_VENTE
+FROM ticket
+WHERE ticket.DATE_VENTE BETWEEN '2014-03-1 00:00:00' AND  '2014-03-31 00:00:00';
+
+#Autre solution
+SELECT NUMERO_TICKET, DATE_VENTE
+FROM ticket
+WHERE ANNEE = 2014 AND MONTH(DATE_VENTE) LIKE 3;
+```
+
+## Exercice 6
+
+```sql
+SELECT ANNEE, NUMERO_TICKET, DATE_VENTE
+FROM ticket
+WHERE ticket.DATE_VENTE BETWEEN '2014-03-1 00:00:00' AND  '2014-04-30 00:00:00';
+
+#Autre solution
+SELECT NUMERO_TICKET, DATE_VENTE
+FROM ticket
+WHERE ANNEE = 2014 AND MONTH(DATE_VENTE) BETWEEN 3 AND 4;
+```
+
+## Exercice 7
+
+```sql
+SELECT ANNEE, NUMERO_TICKET, DATE_VENTE
+FROM ticket
+WHERE ticket.DATE_VENTE LIKE '%2014-03%' OR ticket.DATE_VENTE LIKE '%2014-06%';
+
+#Autre solution
+SELECT NUMERO_TICKET, DATE_VENTE
+FROM ticket
+WHERE ANNEE = 2014 AND MONTH(DATE_VENTE) IN (3, 6);
+```
+
+## Exercice 8
+
+```sql
+SELECT couleur.NOM_COULEUR, article.ID_ARTICLE, article.NOM_ARTICLE
+FROM article
+INNER JOIN couleur
+	ON couleur.ID_Couleur = article.ID_Couleur
+ORDER BY couleur.ID_Couleur;
+```
+
+## Exercice 9
+
+```sql
+SELECT article.ID_ARTICLE, article.NOM_ARTICLE
+FROM article
+WHERE article.ID_Couleur IS NULL;
+```
+
+## Exercice 10
+
+```sql
+SELECT ventes.NUMERO_TICKET, SUM(ventes.QUANTITE)
+FROM ventes
+GROUP BY ventes.NUMERO_TICKET;
+```
+
+## Exercice 11
+
+```sql
+SELECT ventes.NUMERO_TICKET, SUM(ventes.QUANTITE)
+FROM ventes
+GROUP BY ventes.NUMERO_TICKET
+HAVING SUM(ventes.QUANTITE) > 500
+ORDER BY SUM(ventes.QUANTITE) ASC;
+```
+
+## Exercice 12
+
+```sql
+SELECT ventes.NUMERO_TICKET, SUM(ventes.QUANTITE)
+FROM ventes
+GROUP BY ventes.NUMERO_TICKET
+HAVING SUM(ventes.QUANTITE) > 500 AND SUM (ventes.QUANTITE) IS NOT 50
+ORDER BY SUM(ventes.QUANTITE) ASC;
+```
