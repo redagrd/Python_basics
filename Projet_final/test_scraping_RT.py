@@ -29,37 +29,12 @@ donnees_commentaires = []
 for commentaire in commentaires:
             utilisateur = commentaire.find_element(By.CLASS_NAME, "audience-reviews__name-wrap").text
             texte_commentaire = commentaire.find_element(By.CLASS_NAME, "audience-reviews__review.js-review-text").text
-            for note in commentaire:
-                if commentaire.find_element(By.CLASS_NAME, "star-display__half").is_displayed() :
-                    note = 0.5
-                elif commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed():
-                    note = 1
-                elif commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__half").is_displayed():
-                    note = 1.5
-                elif commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed():
-                    note = 2
-                elif commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__half").is_displayed():
-                    note = 2.5
-                elif commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed():
-                    note = 3
-                elif commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__half").is_displayed():
-                    note = 3.5
-                elif commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed():
-                    note = 4
-                elif commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__half").is_displayed(): 
-                    note = 4.5
-                elif commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed() and commentaire.find_element(By.CLASS_NAME, "star-display__filled").is_displayed():
-                    note = 5
-                else:
-                    note = 0
         # calculer la note de l'utilisateur en multipliant la note par 5
-            note_utilisateur = note
         
     # Stocker les données dans un dictionnaire
             donnees = {
         'Utilisateur': utilisateur,
         'Commentaire': texte_commentaire,
-        'Note de l\'utilisateur': note_utilisateur
     }
     
     # Ajouter le dictionnaire à la liste
