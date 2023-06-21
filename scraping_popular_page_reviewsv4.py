@@ -61,20 +61,20 @@ def extract_movie_data_from_imdb_id(id_list):
     df = pd.DataFrame.from_dict(movie_data_list)
     return df
 
-def click_load_more(element):
+def click_see_all(element):
     '''_summary_ : This function clicks on the "See more" button to extend the full comment
     '''
     try:
-        see_more = element.find_element(By.CLASS_NAME, "ipl-expander")
-        if see_more.is_displayed():
-            see_more.click() 
+        see_all = element.find_element(By.CLASS_NAME, "ipl-expander")
+        if see_all.is_displayed():
+            see_all.click() 
     except:
         pass
 
 # get the most popular movies id
 
 movies_ids = get_the_most_popular_movies_id(api_key)
-df = extract_movie_data_from_imdb_id([movies_ids[0]])
+df = extract_movie_data_from_imdb_id(movies_ids)
 id = df['id_movie']
 
 url = f'https://api.themoviedb.org/3/movie/{id}'
@@ -95,45 +95,57 @@ while True:
         url = f'https://www.imdb.com/title/{id}/reviews?ref_=tt_ov_rt'
         driver.get(url)
         time.sleep(1)
+        
+        # click "Load more" button until it disappears
+        # while True:
+        #     try:
+        #         load_more_button = driver.find_element(By.CLASS_NAME, "ipl-load-more__button")
+        #         load_more_button.click()
+        #         time.sleep(1)
+        #     except:
+        #         break
+            
+        
 
         reviews = driver.find_elements(By.CLASS_NAME, "review-container")
-        for review in reviews[:5]:
-            click_load_more(review)
+        for review in reviews:
+            click_see_all(review)
+            
             # get the title of the movie
             try:
                 title = df.loc[df['id_imdb'] == id, 'title'].iloc[0]
             except:
-                title = 'title not found'
+                title = None
                 
             # get the id of the movie
             try:
                 id = df.loc[df['id_imdb'] == id, 'id_imdb'].iloc[0]
             except:
-                id = 'id not found'
+                id = None
             # get the review score
             try:
                 for score in review.find_elements(By.CLASS_NAME, "rating-other-user-rating"):
                     review_score = score.text.replace('/10','')
             except:
-                review_score = 'Score not found'
+                review_score = 0
             # get the review url and the user url
             try:
                 lnks = review.find_elements(By.TAG_NAME,"a")
                 review_url = lnks[0].get_attribute('href')
                 user_url = lnks[1].get_attribute('href')
             except:
-                review_url = 'URL not found'
+                review_url = None
             # get the review date and convert it to the right format
             try:
                 review_date = review.find_element(By.CLASS_NAME, "review-date").text
                 review_date = datetime.strptime(review_date, '%d %B %Y').strftime('%Y-%m-%d')
             except:
-                review_date = 'date not found'
+                review_date = None
             # get the username
             try:
                 username = review.find_element(By.CLASS_NAME, "display-name-link").text
             except:
-                username = 'user not found'
+                username = None
             # get the comment of the user and remove the useless lines
             try:
                 comment = review.find_element(By.CLASS_NAME, "content").text.replace('\n\n','\n')
@@ -142,24 +154,30 @@ while True:
                 comment = [line for line in comment if not 'Permalink' in line]
                 comment = '\n'.join(comment)
             except:
-                comment = 'comment not found'
+                comment = None
             # store the data in a list of dictionaries
-            data_comments.append({'id': id, 'title': title, 'user': username, 'comment': comment, 'score': review_score, 'user_url': user_url, 'review_url': review_url, 'date': review_date})
+            data_comments.append({ 'id': id, 'title': title, 'user': username, 'comment': comment, 'score': review_score, 'user_url': user_url, 'review_url': review_url, 'date': review_date})
     break
 
-csv_path = 'testV3.csv'
 
-# write the data in a csv file
+
+csv_path = 'testV3.csv'
+df = pd.DataFrame(data_comments)
+
+#store the data in a csv file
 with open(csv_path, mode='w', newline='', encoding='utf-8') as csv_file:
     fieldnames = ['id', 'title', 'user', 'comment', 'score', 'user_url', 'review_url', 'date']
-    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+    writer = csv.DictWriter(csv_file, fieldnames=fieldnames, delimiter=';')
     writer.writeheader()
     writer.writerows(data_comments)
 
+print(df.dtypes)
 print("Data saved in CSV file")
 
 # close the driver
 driver.quit()
+
+
 
 
 

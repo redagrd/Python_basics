@@ -1,6 +1,8 @@
 import requests
 import pandas as pd
 import api_keys
+import csv
+from datetime import datetime
 
 # Votre clé API TMDB
 api_key_tmdb = api_keys.TMDB
@@ -14,7 +16,7 @@ def get_the_most_popular_movies_id(api_key):
     """
 
     # Number of pages of results, there is 20 movies per page
-    total_pages = 5
+    total_pages = 1
     list_of_popular_movies_id = []
     for page in range(1,total_pages+1):
 
@@ -28,7 +30,6 @@ def get_the_most_popular_movies_id(api_key):
             list_of_popular_movies_id.append(popular_film['id'])
         
     return list_of_popular_movies_id
-
 
 def get_movie_actors(api_key,id):
     """_summary_ : This function returns the list of the most popular movies id from the TMDB API
@@ -51,7 +52,7 @@ def get_movie_actors(api_key,id):
                         'role': cast['known_for_department']}
         movie_people_list.append(data_to_save)
     for crewmate in data['crew']:
-        if crewmate['job'] in ['Procucer', 'Director', 'Screenplay']:
+        if crewmate['job'] in ['Executive Producer', 'Director', 'Screenplay']:
             data_to_save = {'name': crewmate['name'],
                         'gender': crewmate['gender'], 
                         'popularity': crewmate['popularity'],
@@ -60,74 +61,19 @@ def get_movie_actors(api_key,id):
 
     return movie_people_list
 
-def get_RT_id_from_imdb_id(omdb_apikey,imdb_id):
-    """_summary_ : This function returns the Rotten Tomatoes unique ID from the websites movie url from the TMDB API whith the IMDB unique movie ID
-    Returns:
-        RT_id: Rotten Tomatoes unique ID 
-    """
-    url = f"http://www.omdbapi.com/?apikey={omdb_apikey}&tomatoes=true&i={imdb_id}"
-    headers = {"accept": "application/json"}
-    response = requests.get(url, headers=headers)
-    data = response.json()
-    if data['tomatoURL'] == "N/A" :
-        RT_id = "N/A"
-    else : RT_id = data['tomatoURL'].split('/')[-1]
-    return RT_id
-
-def extract_movie_data_from_imdb_id(api_key_tmdb, api_key_omdb, id_list):
-    """_summary_ : This function extracts the movie components from the differents apis (TMDB, OMDB) to feed our database
-    Returns:
-        df: Pandas Dataframe of the movie table and its close relations 
-    """
-    movie_data_list = []
-    for id in id_list:
-        url = f'https://api.themoviedb.org/3/movie/{id}'
-        params = {'api_key': api_key_tmdb}
-        response = requests.get(url, params=params)
-        data = response.json()
-        data['genres'] = [genre['name'] for genre in data['genres']]
-        data['production_companies'] = [company['name'] for company in data['production_companies']]
-        data['production_countries'] = [country['name'] for country in data['production_countries']]
-            
-        # Stock datas in a dict
-        data_to_save = {
-            'id_tmdb': data['id'],
-            'id_imdb': data['imdb_id'],
-            'title': data['original_title'],
-            'synopsis': data['overview'],
-            'popularity': data['popularity'],
-            'production_companies': data['production_companies'], 
-            'countries': data['production_countries'],
-            'revenue': data['revenue'],
-            'budget': data['budget'],
-            'genres': data['genres'],
-            'release_date': data['release_date'],
-            'runtime': data['runtime'],
-            'review_score': data['vote_average'],
-        }
-        
-        data_to_save['role'] = get_movie_actors(api_key_tmdb,id)
-        data_to_save['keywords'] = get_the_movie_key_words(api_key_tmdb,id)
-        data_to_save['id_rt'] = get_RT_id_from_imdb_id(api_key_omdb, data['imdb_id'])
-        data_to_save['certification'] = get_certification(api_key_tmdb, data['imdb_id'])
-        movie_data_list.append(data_to_save)
-    df = pd.DataFrame.from_dict(movie_data_list)
-    return df
-
-
-
-
-
-# import requests
-
-# url = "https://api.themoviedb.org/3/movie/movie_id/keywords"
-
-# headers = {"accept": "application/json"}
-
-# response = requests.get(url, headers=headers)
-
-# print(response.text)
-
+# def get_RT_id_from_imdb_id(omdb_apikey,imdb_id):
+#     """_summary_ : This function returns the Rotten Tomatoes unique ID from the websites movie url from the TMDB API whith the IMDB unique movie ID
+#     Returns:
+#         RT_id: Rotten Tomatoes unique ID 
+#     """
+#     url = f"http://www.omdbapi.com/?apikey={omdb_apikey}&tomatoes=true&i={imdb_id}"
+#     headers = {"accept": "application/json"}
+#     response = requests.get(url, headers=headers)
+#     data = response.json()
+#     if data['tomatoURL'] == "N/A" :
+#         RT_id = "N/A"
+#     else : RT_id = data['tomatoURL'].split('/')[-1]
+#     return RT_id
 
 def get_the_movie_key_words(api_key,id):
     """_summary_ : This function returns the list of keywords of the movie
@@ -143,8 +89,6 @@ def get_the_movie_key_words(api_key,id):
     data['keywords'] = [keyword['name'] for keyword in data['keywords']]
 
     return data['keywords']
-
-
 
 def get_certification(api_key,id):
     """_summary_ : This function returns the PEGI of the movie
@@ -165,11 +109,87 @@ def get_certification(api_key,id):
 
     return certification
 
+def extract_movie_data_from_imdb_id(api_key_tmdb, api_key_omdb, id_list):
+    """_summary_ : This function extracts the movie components from the differents apis (TMDB, OMDB) to feed our database
+    Returns:
+        df: Pandas Dataframe of the movie table and its close relations 
+    """
+    movie_data_list = []
+    for id in id_list:
+        url = f'https://api.themoviedb.org/3/movie/{id}'
+        params = {'api_key': api_key_tmdb}
+        response = requests.get(url, params=params)
+        data = response.json()
+        data['genres'] = [genre['name'] for genre in data['genres']]
+        data['production_companies'] = [company['name'] for company in data['production_companies']]
+        data['production_countries'] = [country['name'] for country in data['production_countries']]
+
+        # Convert data to the right type
+        data_to_save = {}
+        for key, value in data.items():
+            if key in ['id_tmdb', 'revenue', 'budget', 'runtime']:
+                data_to_save[key] = int(value)
+            elif key in ['id_imdb', 'title', 'synopsis', 'production_companies', 'countries', 'genres', 'release_date']:
+                data_to_save[key] = str(value)
+            elif key == 'popularity' or key == 'review_score':
+                data_to_save[key] = float(value)
+            elif key == 'release_date':
+                data_to_save[key] = datetime.strptime(value, '%Y-%m-%d')
+            else:
+                data_to_save[key] = value
+                            
+        # Stock datas in a dict
+        data_to_save = {
+            'id_tmdb': data['id'],
+            'id_imdb': data['imdb_id'],
+            'title': data['original_title'],
+            'synopsis': data['overview'],
+            'popularity': data['popularity'],
+            'production_companies': data['production_companies'], 
+            'countries': data['production_countries'],
+            'revenue': data['revenue'],
+            'budget': data['budget'],
+            'genres': data['genres'],
+            'release_date': data['release_date'],
+            'runtime': data['runtime'],
+            'review_score': data['vote_average'],
+        }
 
 
+        
+        data_to_save['role'] = get_movie_actors(api_key_tmdb,id)
+        data_to_save['keywords'] = get_the_movie_key_words(api_key_tmdb,id)
+        #data_to_save['id_rt'] = get_RT_id_from_imdb_id(api_key_omdb, data['imdb_id'])
+        data_to_save['certification'] = get_certification(api_key_tmdb, data['imdb_id'])
+        movie_data_list.append(data_to_save)
+    df = pd.DataFrame.from_dict(movie_data_list)
+    return df
+
+# import requests
+
+# url = "https://api.themoviedb.org/3/movie/movie_id/keywords"
+
+# headers = {"accept": "application/json"}
+
+# response = requests.get(url, headers=headers)
+
+# print(response.text)
 
 
 movies_ids = get_the_most_popular_movies_id(api_key_tmdb)
-df = extract_movie_data_from_imdb_id(api_key_tmdb, api_key_omdb, movies_ids[0:5])
+df = extract_movie_data_from_imdb_id(api_key_tmdb, api_key_omdb, movies_ids)
 #print(get_certification(api_key_tmdb,movies_ids[0]))
 #print(get_the_movie_key_words(api_key_tmdb,movies_ids[0]))
+
+csv_path = 'testapi.csv'
+
+# write the data in a csv file
+with open(csv_path, mode='w', newline='', encoding='utf-8') as csv_file:
+    fieldnames = ['id_tmdb', 'id_imdb', 'title', 'synopsis', 'popularity', 'production_companies', 'countries', 'revenue', 'budget', 'genres', 'release_date', 'runtime', 'review_score', 'role', 'keywords', 'certification']
+    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+    writer.writeheader()
+    for movie in df.to_dict('records'):
+        writer.writerow(movie)
+
+print(df.dtypes)
+print("Data saved in CSV file")
